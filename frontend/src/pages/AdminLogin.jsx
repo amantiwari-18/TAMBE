@@ -107,11 +107,6 @@ const AdminLogin = () => {
           </button>
         </div>
 
-        <div className="mt-8 p-4" style={{ background: 'rgba(0, 255, 209, 0.1)', border: '1px solid var(--color-primary)' }}>
-          <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            Default password: <code style={{ color: 'var(--color-primary)' }}>tambe_admin_2024</code>
-          </p>
-        </div>
       </motion.div>
     </div>
   );

@@ -245,6 +245,17 @@ const AdminDashboard = () => {
           </div>
           <div className="flex items-center gap-4">
             <button
+              onClick={() => navigate('/admin/products')}
+              className="px-4 py-2 text-sm font-medium"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: 'var(--color-text-primary)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              Manage Products
+            </button>
+            <button
               onClick={() => navigate('/')}
               className="px-4 py-2 text-sm"
               style={{ color: 'var(--color-text-muted)' }}

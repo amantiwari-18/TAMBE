@@ -1,11 +1,18 @@
-# TAMBE Website - Theme Customization Admin Panel
-## Complete Usage Guide
+# TAMBE Website - Admin Panel Complete Guide
+## Theme Customization & Product Management
 
 ---
 
 ## 🎨 Overview
 
-The Theme Customization Admin Panel allows you to control the entire website's appearance without touching code. Change colors, fonts, typography, and see changes in real-time before publishing.
+The Admin Panel provides complete control over your website's appearance and content without writing code. Manage colors, fonts, typography, and products - all through an intuitive interface.
+
+### Key Features:
+1. **Theme Customization** - Colors, fonts, typography
+2. **Product Management** - Add, edit, delete products
+3. **Real-time Preview** - See changes before publishing
+4. **Image Upload** - Upload product images directly
+5. **Safety Controls** - Validation and rollback options
 
 ---
 
@@ -13,7 +20,7 @@ The Theme Customization Admin Panel allows you to control the entire website's a
 
 ### Admin Login
 - **URL**: `https://your-domain.com/admin/login`
-- **Default Password**: `tambe_admin_2024`
+- **Password**: Set in backend environment variable `ADMIN_PASSWORD`
 - **Security**: Token-based authentication stored in localStorage
 
 ### Changing Admin Password
@@ -25,7 +32,183 @@ Then restart the backend: `sudo supervisorctl restart backend`
 
 ---
 
-## 🎛️ Dashboard Features
+## 📦 PRODUCT MANAGEMENT
+
+### Accessing Product Management
+1. Login to admin panel
+2. Click **"Manage Products"** button in header
+3. Or navigate to `/admin/products`
+
+### 🆕 Adding New Products
+
+**Step 1: Click "Add Product"**
+- Green button in top-right corner
+
+**Step 2: Fill Product Details**
+
+#### **Product Name** (Required)
+- Example: "Precision Gears", "Transmission Systems"
+- Keep it concise and descriptive
+
+#### **Category** (Required)
+Choose from dropdown:
+- **Gears** - Gear products
+- **Automotive Parts** - Car components
+- **Custom Components** - Bespoke parts
+
+#### **Description** (Required)
+- 2-3 sentences describing the product
+- Highlight key benefits and use cases
+- Example: "High-performance gears engineered for maximum durability and efficiency"
+
+#### **Features** (At least 1 required)
+- List 3-5 key features
+- Each feature on separate line
+- Click "+ Add Feature" for more
+- Click "X" to remove a feature
+- Examples:
+  - "CNC Machined"
+  - "Heat Treated"
+  - "ISO Certified"
+
+#### **Product Image** (Optional)
+**Upload Image:**
+1. Click "Upload Image" button
+2. Select image file (JPEG, PNG, WebP)
+3. Max file size: 5MB
+4. Preview appears instantly
+5. Click "X" to remove and choose different image
+
+**Image Guidelines:**
+- ✅ High resolution (at least 800x600px)
+- ✅ Clear product photo on plain background
+- ✅ Good lighting
+- ✅ Professional quality
+- ❌ No watermarks or text overlays
+- ❌ Avoid cluttered backgrounds
+
+**If No Image:**
+- Gradient placeholder will be used
+- Shows product name
+- Still looks professional
+
+#### **Active Status**
+- ☑️ **Checked** = Visible on website
+- ☐ **Unchecked** = Hidden (draft mode)
+
+**Step 3: Save Product**
+- Click **"Create Product"** button
+- Success message appears
+- Product added to list
+- Immediately visible on website (if active)
+
+---
+
+### ✏️ Editing Products
+
+**Step 1: Find Product**
+- Scroll through product list
+- Look for product name
+
+**Step 2: Click Edit Button** (✏️ pencil icon)
+- Form opens with current details pre-filled
+
+**Step 3: Make Changes**
+- Update any fields
+- Change image (upload new or keep existing)
+- Modify features
+
+**Step 4: Save Changes**
+- Click **"Update Product"**
+- Changes reflect immediately on website
+
+---
+
+### 👁️ Show/Hide Products
+
+**Quick Toggle:**
+- Click **Eye icon** (👁️) next to product
+- Green eye = Visible on website
+- Gray crossed-eye = Hidden
+
+**Use Cases:**
+- Hide out-of-stock products
+- Test new products before public launch
+- Seasonal products (show/hide by season)
+
+---
+
+### 🗑️ Deleting Products
+
+**Step 1: Click Delete Button** (🗑️ trash icon)
+- Red button next to product
+
+**Step 2: Confirm Deletion**
+- Popup asks for confirmation
+- Click "OK" to permanently delete
+- Click "Cancel" to keep product
+
+**⚠️ Warning**: Deletion is permanent and cannot be undone!
+
+---
+
+### 📊 Product Display Order
+
+Products appear on website in the order they were created.
+
+**To Reorder** (future feature):
+- Drag and drop products
+- Or use "Order" field
+
+---
+
+### 🎬 Product Management Workflow Examples
+
+#### Example 1: Launching New Product
+1. Click "Add Product"
+2. Enter name: "Advanced Clutch System"
+3. Select category: "Automotive Parts"
+4. Write description
+5. Add 3-5 features
+6. Upload professional product photo
+7. **Uncheck "Active"** (keep hidden)
+8. Click "Create Product"
+9. Preview on test environment
+10. When ready: Click Eye icon to make visible
+
+#### Example 2: Seasonal Update
+1. **Winter Season Ends:**
+   - Click Eye icon on winter products → Hide
+2. **Spring Season Starts:**
+   - Click Eye icon on spring products → Show
+3. Changes instant, no downtime
+
+#### Example 3: Product Improvement
+1. Click Edit on existing product
+2. Upload better quality image
+3. Add 2 more features discovered from customer feedback
+4. Update description with new benefits
+5. Click "Update Product"
+6. Website updated instantly
+
+---
+
+### 🔄 Initialize Default Products
+
+**First Time Setup:**
+- If no products exist, click **"Initialize Default Products"**
+- Adds 6 sample products:
+  1. Precision Gears
+  2. Transmission Systems
+  3. Custom Components
+  4. Drive Shafts
+  5. Differential Gears
+  6. Clutch Systems
+- Use as templates or delete and add your own
+
+---
+
+## 🎨 THEME CUSTOMIZATION
 
 ### 1. Color Settings (12 Controls)
 

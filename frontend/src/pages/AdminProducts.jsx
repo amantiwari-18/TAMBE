@@ -36,6 +36,9 @@ const AdminProducts = () => {
     is_active: true,
     order: 0,
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -85,6 +88,8 @@ const AdminProducts = () => {
 
   const handleCreate = () => {
     setIsCreating(true);
+    setImageFile(null);
+    setImagePreview(null);
     setFormData({
       name: '',
       category: 'Gears',
@@ -98,6 +103,8 @@ const AdminProducts = () => {
 
   const handleEdit = (product) => {
     setEditingProduct(product.id);
+    setImageFile(null);
+    setImagePreview(product.image_url ? `${BACKEND_URL}${product.image_url}` : null);
     setFormData({
       name: product.name,
       category: product.category,
@@ -112,6 +119,8 @@ const AdminProducts = () => {
   const handleCancel = () => {
     setIsCreating(false);
     setEditingProduct(null);
+    setImageFile(null);
+    setImagePreview(null);
     setFormData({
       name: '',
       category: 'Gears',
@@ -121,6 +130,63 @@ const AdminProducts = () => {
       is_active: true,
       order: 0,
     });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select a valid image file');
+        return;
+      }
+      
+      setImageFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setFormData((prev) => ({ ...prev, image_url: '' }));
+  };
+
+  const uploadImage = async () => {
+    if (!imageFile) return formData.image_url;
+    
+    try {
+      setUploadingImage(true);
+      const token = localStorage.getItem('admin_token');
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', imageFile);
+      
+      const response = await axios.post(`${API}/products/upload-image`, formDataUpload, {
+        headers: {
+          'x-admin-token': token,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      return response.data.image_url;
+    } catch (error) {
+      toast.error('Failed to upload image');
+      throw error;
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSave = async () => {
@@ -139,9 +205,16 @@ const AdminProducts = () => {
         return;
       }
 
+      // Upload image if new file selected
+      let imageUrl = formData.image_url;
+      if (imageFile) {
+        imageUrl = await uploadImage();
+      }
+
       const productData = {
         ...formData,
         features: filteredFeatures,
+        image_url: imageUrl,
       };
 
       if (isCreating) {
@@ -397,20 +470,58 @@ const AdminProducts = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-primary)' }}>
-                  Image URL (optional)
+                  Product Image (optional)
                 </label>
-                <input
-                  type="text"
-                  value={formData.image_url}
-                  onChange={(e) => handleInputChange('image_url', e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-3 text-base"
-                  style={{
-                    background: 'rgba(0, 0, 0, 0.5)',
-                    border: '1px solid var(--color-border)',
-                    color: 'var(--color-text-primary)',
-                  }}
-                />
+                
+                {imagePreview ? (
+                  <div className="mb-4">
+                    <div className="relative inline-block">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="h-48 w-auto object-cover"
+                        style={{ border: '1px solid var(--color-border)' }}
+                      />
+                      <button
+                        onClick={handleRemoveImage}
+                        className="absolute top-2 right-2 p-2"
+                        style={{
+                          background: 'rgba(255, 68, 68, 0.9)',
+                          color: 'white',
+                        }}
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+                
+                <div className="flex gap-4 items-center">
+                  <label
+                    className="px-6 py-3 cursor-pointer font-medium"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      color: 'var(--color-text-primary)',
+                      border: '1px solid var(--color-border)',
+                      display: 'inline-block',
+                    }}
+                  >
+                    {imagePreview ? 'Change Image' : 'Upload Image'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                  <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                    JPEG, PNG, WebP (max 5MB)
+                  </span>
+                </div>
+                
+                <p className="text-xs mt-2" style={{ color: 'var(--color-text-muted)' }}>
+                  Or leave empty to use gradient placeholder
+                </p>
               </div>
 
               <div className="flex items-center gap-3">
@@ -429,16 +540,18 @@ const AdminProducts = () => {
               <div className="flex gap-4">
                 <motion.button
                   onClick={handleSave}
+                  disabled={uploadingImage}
                   className="flex items-center gap-2 px-6 py-3 font-medium"
                   style={{
-                    background: 'var(--color-primary)',
+                    background: uploadingImage ? '#666' : 'var(--color-primary)',
                     color: 'var(--color-button-text)',
+                    cursor: uploadingImage ? 'not-allowed' : 'pointer',
                   }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={!uploadingImage ? { scale: 1.02 } : {}}
+                  whileTap={!uploadingImage ? { scale: 0.98 } : {}}
                 >
                   <Save size={20} />
-                  {isCreating ? 'Create Product' : 'Update Product'}
+                  {uploadingImage ? 'Uploading...' : (isCreating ? 'Create Product' : 'Update Product')}
                 </motion.button>
                 <button
                   onClick={handleCancel}

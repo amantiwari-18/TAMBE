@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header, File, UploadFile
+from fastapi.responses import FileResponse
 from typing import List, Optional
 from models.product import (
     Product,
@@ -9,8 +10,13 @@ from models.product import (
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import datetime
 import os
+import shutil
+import uuid
 
 router = APIRouter(prefix="/products", tags=["products"])
+
+UPLOAD_DIR = "/app/backend/uploads/products"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 # Simple auth check
@@ -93,6 +99,44 @@ async def delete_product(
 
     await db.products.delete_one({"id": product_id})
     return {"message": "Product deleted successfully"}
+
+
+# Upload product image (admin only)
+@router.post("/upload-image")
+async def upload_product_image(
+    file: UploadFile = File(...),
+    _: bool = Depends(verify_admin_token),
+):
+    try:
+        # Validate file type
+        allowed_types = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
+        if file.content_type not in allowed_types:
+            raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG, PNG, and WebP are allowed.")
+        
+        # Generate unique filename
+        file_extension = file.filename.split(".")[-1]
+        unique_filename = f"{uuid.uuid4()}.{file_extension}"
+        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+        
+        # Save file
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        # Return image URL
+        image_url = f"/api/products/images/{unique_filename}"
+        return {"image_url": image_url, "message": "Image uploaded successfully"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to upload image: {str(e)}")
+
+
+# Serve product images
+@router.get("/images/{filename}")
+async def get_product_image(filename: str):
+    file_path = os.path.join(UPLOAD_DIR, filename)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    return FileResponse(file_path)
 
 
 # Reorder products (admin only)
