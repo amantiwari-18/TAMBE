@@ -12,9 +12,12 @@ import WhyChoose from "./components/WhyChoose";
 import Gallery from "./components/Gallery";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import WhatsAppButton from "./components/WhatsAppButton";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
+import AdminSettings from "./pages/AdminSettings";
+import AdminHero from "./pages/AdminHero";
 
 const HomePage = () => (
   <>
@@ -27,6 +30,7 @@ const HomePage = () => (
     <Gallery />
     <Contact />
     <Footer />
+    <WhatsAppButton />
   </>
 );
 
@@ -41,6 +45,8 @@ function App() {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/admin/hero" element={<AdminHero />} />
             <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
           </Routes>
         </div>

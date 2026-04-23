@@ -67,13 +67,14 @@ async def get_status_checks():
     return status_checks
 
 # Import route modules
-from routes import theme_routes, admin_routes, product_routes, settings_routes
+from routes import theme_routes, admin_routes, product_routes, settings_routes, hero_routes
 
 # Include sub-routers
 api_router.include_router(theme_routes.router)
 api_router.include_router(admin_routes.router)
 api_router.include_router(product_routes.router)
 api_router.include_router(settings_routes.router)
+api_router.include_router(hero_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)

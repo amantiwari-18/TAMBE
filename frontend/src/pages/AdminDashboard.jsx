@@ -245,6 +245,17 @@ const AdminDashboard = () => {
           </div>
           <div className="flex items-center gap-4">
             <button
+              onClick={() => navigate('/admin/hero')}
+              className="px-4 py-2 text-sm font-medium"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: 'var(--color-text-primary)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              Hero Slider
+            </button>
+            <button
               onClick={() => navigate('/admin/products')}
               className="px-4 py-2 text-sm font-medium"
               style={{
@@ -253,7 +264,18 @@ const AdminDashboard = () => {
                 border: '1px solid var(--color-border)',
               }}
             >
-              Manage Products
+              Products
+            </button>
+            <button
+              onClick={() => navigate('/admin/settings')}
+              className="px-4 py-2 text-sm font-medium"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: 'var(--color-text-primary)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              Site Settings
             </button>
             <button
               onClick={() => navigate('/')}
