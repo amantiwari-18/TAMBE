@@ -33,6 +33,7 @@ const AdminProducts = () => {
     description: '',
     features: ['', '', ''],
     image_url: '',
+    link_url: '',
     is_active: true,
     order: 0,
   });
@@ -96,6 +97,7 @@ const AdminProducts = () => {
       description: '',
       features: ['', '', ''],
       image_url: '',
+      link_url: '',
       is_active: true,
       order: products.length,
     });
@@ -111,6 +113,7 @@ const AdminProducts = () => {
       description: product.description,
       features: product.features,
       image_url: product.image_url || '',
+      link_url: product.link_url || '',
       is_active: product.is_active,
       order: product.order,
     });
@@ -127,6 +130,7 @@ const AdminProducts = () => {
       description: '',
       features: ['', '', ''],
       image_url: '',
+      link_url: '',
       is_active: true,
       order: 0,
     });
@@ -521,6 +525,27 @@ const AdminProducts = () => {
                 
                 <p className="text-xs mt-2" style={{ color: 'var(--color-text-muted)' }}>
                   Or leave empty to use gradient placeholder
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-primary)' }}>
+                  Learn More URL (optional)
+                </label>
+                <input
+                  type="url"
+                  value={formData.link_url}
+                  onChange={(e) => handleInputChange('link_url', e.target.value)}
+                  placeholder="https://example.com/product-details"
+                  className="w-full px-4 py-3 text-base"
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    border: '1px solid var(--color-border)',
+                    color: 'var(--color-text-primary)',
+                  }}
+                />
+                <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+                  URL for "Learn More" button (leave empty to disable button)
                 </p>
               </div>
 

@@ -11,6 +11,7 @@ class Product(BaseModel):
     description: str
     features: List[str]
     image_url: Optional[str] = None
+    link_url: Optional[str] = None  # Learn More button URL
     is_active: bool = True
     order: int = 0
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -23,6 +24,7 @@ class ProductCreate(BaseModel):
     description: str
     features: List[str]
     image_url: Optional[str] = None
+    link_url: Optional[str] = None
     is_active: bool = True
     order: int = 0
 
@@ -33,6 +35,7 @@ class ProductUpdate(BaseModel):
     description: Optional[str] = None
     features: Optional[List[str]] = None
     image_url: Optional[str] = None
+    link_url: Optional[str] = None
     is_active: Optional[bool] = None
     order: Optional[int] = None
 
@@ -44,6 +47,7 @@ class ProductResponse(BaseModel):
     description: str
     features: List[str]
     image_url: Optional[str]
+    link_url: Optional[str]
     is_active: bool
     order: int
     created_at: datetime

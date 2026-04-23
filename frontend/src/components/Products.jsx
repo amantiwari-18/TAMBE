@@ -146,13 +146,22 @@ const Products = () => {
                   </div>
 
                   {/* CTA */}
-                  <button
-                    className="flex items-center gap-2 font-medium text-base group-hover:gap-4 transition-all duration-300"
-                    style={{ color: 'var(--color-primary)' }}
-                  >
-                    Learn More
-                    <ArrowRight size={18} />
-                  </button>
+                  {product.link_url ? (
+                    <a
+                      href={product.link_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 font-medium text-base group-hover:gap-4 transition-all duration-300"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      Learn More
+                      <ArrowRight size={18} />
+                    </a>
+                  ) : (
+                    <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                      Contact us for more information
+                    </span>
+                  )}
                 </div>
               </motion.div>
             ))}
