@@ -1,4 +1,4 @@
-/* Global Styles */
+/* Global Styles with CSS Variables */
 * {
   margin: 0;
   padding: 0;
@@ -10,14 +10,45 @@ html {
 }
 
 body {
-  background: #000000;
-  color: #ffffff;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
   overflow-x: hidden;
 }
 
 .App {
   position: relative;
   min-height: 100vh;
+}
+
+/* Typography with CSS Variables */
+h1 {
+  font-size: var(--font-h1-size);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.62px;
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: var(--font-h2-size);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+h3 {
+  font-size: var(--font-h3-size);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+p, span, div {
+  font-size: var(--font-body-size);
+  color: var(--color-text-primary);
 }
 
 /* Smooth Transitions - Avoid 'all' for transforms */
@@ -30,6 +61,7 @@ button {
   border: none;
   cursor: pointer;
   font-family: inherit;
+  font-size: var(--font-button-size);
 }
 
 /* Input focus styles */
@@ -37,18 +69,18 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: #00FFD1;
+  border-color: var(--color-primary);
 }
 
 /* Selection color */
 ::selection {
-  background: #00FFD1;
-  color: #000000;
+  background: var(--color-primary);
+  color: var(--color-button-text);
 }
 
 ::-moz-selection {
-  background: #00FFD1;
-  color: #000000;
+  background: var(--color-primary);
+  color: var(--color-button-text);
 }
 
 /* Scrollbar Styles */
@@ -57,14 +89,14 @@ select:focus {
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #00FFD1;
+  background: var(--color-primary);
   border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00E5C0;
+  opacity: 0.8;
 }
