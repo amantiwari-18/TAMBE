@@ -63,9 +63,15 @@ export const ThemeProvider = ({ children }) => {
     root.style.setProperty('--font-body-size', theme.fonts.body_size);
     root.style.setProperty('--font-button-size', theme.fonts.button_size);
 
-    // Update body background
+    // Update body background and color
     document.body.style.background = theme.colors.background;
     document.body.style.color = theme.colors.text_primary;
+    document.body.style.fontFamily = theme.fonts.family;
+    
+    // Force repaint
+    document.body.style.display = 'none';
+    document.body.offsetHeight; // Trigger reflow
+    document.body.style.display = '';
   };
 
   // Preview theme without saving
