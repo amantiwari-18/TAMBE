@@ -7,19 +7,19 @@
 
 /* CSS Variables for Dynamic Theming */
 :root {
-    /* Default Colors (Industrial Dark) */
-    --color-primary: #00FFD1;
-    --color-secondary: #FFFFFF;
-    --color-background: #000000;
-    --color-background-secondary: #121212;
+    /* Improved Premium Colors - Metallic Gold + Deep Navy */
+    --color-primary: #D4AF37;  /* Rich Gold */
+    --color-secondary: #1A2332;  /* Deep Navy */
+    --color-background: #0A0E17;  /* Rich Black */
+    --color-background-secondary: #141B2D;  /* Dark Blue Gray */
     --color-text-primary: #FFFFFF;
-    --color-text-secondary: rgba(255, 255, 255, 0.8);
+    --color-text-secondary: rgba(255, 255, 255, 0.85);
     --color-text-muted: rgba(255, 255, 255, 0.6);
-    --color-button-bg: #00FFD1;
-    --color-button-text: #000000;
-    --color-button-hover-bg: #FFFFFF;
-    --color-button-hover-text: #000000;
-    --color-border: rgba(255, 255, 255, 0.1);
+    --color-button-bg: #D4AF37;  /* Gold */
+    --color-button-text: #0A0E17;  /* Dark for contrast */
+    --color-button-hover-bg: #F4D03F;  /* Lighter Gold */
+    --color-button-hover-text: #0A0E17;
+    --color-border: rgba(212, 175, 55, 0.2);  /* Gold tint */
     
     /* Default Fonts */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

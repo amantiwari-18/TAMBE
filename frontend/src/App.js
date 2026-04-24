@@ -3,6 +3,7 @@ import "@/App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from 'sonner';
 import { ThemeProvider } from "./context/ThemeContext";
+import SEO from "./components/SEO";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -21,6 +22,7 @@ import AdminHero from "./pages/AdminHero";
 
 const HomePage = () => (
   <>
+    <SEO />
     <Navbar />
     <Hero />
     <About />
