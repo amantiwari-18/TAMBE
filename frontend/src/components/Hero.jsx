@@ -117,7 +117,7 @@ const Hero = () => {
           style={{
             backgroundImage: `
               repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.03) 1px, rgba(255,255,255,0.03) 7.6923%),
-              repeating-linear-gradient(-90deg, rgba(0,255,209,0.1), rgba(0,255,209,0.1) 1px, transparent 1px, transparent 7.6923%)
+              repeating-linear-gradient(-90deg, rgba(212,175,55,0.1), rgba(212,175,55,0.1) 1px, transparent 1px, transparent 7.6923%)
             `,
             backgroundSize: '100% 100%',
           }}

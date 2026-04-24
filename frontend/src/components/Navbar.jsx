@@ -48,7 +48,12 @@ const Navbar = () => {
             <motion.a
               key={index}
               href={link.href}
-              className="text-white/60 hover:text-[#00FFD1] text-lg font-normal transition-colors duration-300"
+              className="text-white/60 text-lg font-normal transition-colors duration-300"
+              style={{ 
+                transition: 'color 0.3s',
+              }}
+              onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+              onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.6)'}
               whileHover={{ y: -2 }}
               transition={{ duration: 0.2 }}
             >
@@ -57,7 +62,11 @@ const Navbar = () => {
           ))}
           <motion.a
             href="#contact"
-            className="bg-[#00FFD1] text-black px-6 py-3 font-medium text-lg transition-all duration-400 hover:bg-white hover:shadow-[0_0_20px_rgba(0,255,209,0.3)]"
+            className="px-6 py-3 font-medium text-lg transition-all duration-400"
+            style={{
+              background: 'var(--color-button-bg)',
+              color: 'var(--color-button-text)',
+            }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -87,7 +96,12 @@ const Navbar = () => {
               <a
                 key={index}
                 href={link.href}
-                className="text-white/80 hover:text-[#00FFD1] text-lg font-normal transition-colors duration-300"
+                className="text-white/80 text-lg font-normal transition-colors duration-300"
+                style={{ 
+                  transition: 'color 0.3s',
+                }}
+                onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+                onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.8)'}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
@@ -95,7 +109,11 @@ const Navbar = () => {
             ))}
             <a
               href="#contact"
-              className="bg-[#00FFD1] text-black px-6 py-3 font-medium text-lg text-center transition-all duration-400 hover:bg-white mt-2"
+              className="px-6 py-3 font-medium text-lg text-center transition-all duration-400 mt-2"
+              style={{
+                background: 'var(--color-button-bg)',
+                color: 'var(--color-button-text)',
+              }}
               onClick={() => setMobileMenuOpen(false)}
             >
               Get Started

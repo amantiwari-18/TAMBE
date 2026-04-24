@@ -29,7 +29,7 @@ const Gallery = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="text-[#00FFD1] text-lg font-medium tracking-wider uppercase mb-4 block">
+          <span className="text-lg font-medium tracking-wider uppercase mb-4 block" style={{ color: 'var(--color-primary)' }}>
             Gallery
           </span>
           <h2 className="text-white text-5xl md:text-[48px] font-semibold leading-[1.1] tracking-tight mb-6">
@@ -63,7 +63,7 @@ const Gallery = () => {
               {/* Overlay on Hover */}
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-400 flex items-center justify-center">
                 <div className="text-center">
-                  <ZoomIn size={48} className="text-[#00FFD1] mb-3 mx-auto" />
+                  <ZoomIn size={48} className="mb-3 mx-auto" style={{ color: 'var(--color-primary)' }} />
                   <p className="text-white text-sm font-medium">{item.alt}</p>
                 </div>
               </div>
@@ -74,7 +74,18 @@ const Gallery = () => {
               </div>
 
               {/* Glow Border on Hover */}
-              <div className="absolute inset-0 border border-transparent group-hover:border-[#00FFD1]/50 group-hover:shadow-[inset_0_0_30px_rgba(0,255,209,0.1)] transition-all duration-400" />
+              <div 
+                className="absolute inset-0 border transition-all duration-400" 
+                style={{ borderColor: 'transparent' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--color-border)';
+                  e.currentTarget.style.boxShadow = 'inset 0 0 30px rgba(212, 175, 55, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              />
             </motion.div>
           ))}
         </div>
@@ -98,7 +109,7 @@ const Gallery = () => {
       </div>
 
       {/* Decorative Glow */}
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#00FFD1] opacity-5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] opacity-5 blur-[120px] rounded-full pointer-events-none" style={{ background: 'var(--color-primary)' }} />
     </section>
   );
 };

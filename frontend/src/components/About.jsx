@@ -98,9 +98,15 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 hover:border-[#00FFD1]/50 transition-all duration-400 group"
+                className="bg-white/5 backdrop-blur-sm border p-8 transition-all duration-400 group"
+                style={{
+                  borderColor: 'rgba(255, 255, 255, 0.1)',
+                  transition: 'border-color 0.4s',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
               >
-                <div className="text-[#00FFD1] text-4xl md:text-5xl font-semibold mb-3 group-hover:scale-110 transition-transform duration-400">
+                <div className="text-4xl md:text-5xl font-semibold mb-3 group-hover:scale-110 transition-transform duration-400" style={{ color: 'var(--color-primary)' }}>
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                 </div>
                 <div className="text-white/70 text-base font-normal">{stat.label}</div>
@@ -110,7 +116,7 @@ const About = () => {
         </div>
 
         {/* Decorative Glow */}
-        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-[#00FFD1] opacity-5 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] opacity-5 blur-[100px] rounded-full pointer-events-none" style={{ background: 'var(--color-primary)' }} />
       </div>
     </section>
   );

@@ -80,7 +80,10 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full bg-black/50 border border-white/10 text-white px-4 py-3 text-base focus:outline-none focus:border-[#00FFD1] transition-colors duration-300"
+                  className="w-full bg-black/50 border text-white px-4 py-3 text-base transition-colors duration-300"
+                  style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
                   placeholder="John Doe"
                 />
               </div>
@@ -96,7 +99,10 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full bg-black/50 border border-white/10 text-white px-4 py-3 text-base focus:outline-none focus:border-[#00FFD1] transition-colors duration-300"
+                  className="w-full bg-black/50 border text-white px-4 py-3 text-base transition-colors duration-300"
+                  style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
                   placeholder="john@example.com"
                 />
               </div>
@@ -112,7 +118,10 @@ const Contact = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full bg-black/50 border border-white/10 text-white px-4 py-3 text-base focus:outline-none focus:border-[#00FFD1] transition-colors duration-300"
+                  className="w-full bg-black/50 border text-white px-4 py-3 text-base transition-colors duration-300"
+                  style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
@@ -135,7 +144,19 @@ const Contact = () => {
 
               <motion.button
                 type="submit"
-                className="w-full bg-[#00FFD1] text-black px-8 py-4 text-lg font-medium min-h-[56px] flex items-center justify-center gap-3 transition-all duration-400 hover:bg-white hover:shadow-[0_0_30px_rgba(0,255,209,0.4)]"
+                className="w-full px-8 py-4 text-lg font-medium min-h-[56px] flex items-center justify-center gap-3 transition-all duration-400"
+                style={{
+                  background: 'var(--color-button-bg)',
+                  color: 'var(--color-button-text)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--color-button-hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--color-button-bg)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -155,10 +176,15 @@ const Contact = () => {
           >
             {/* Info Cards */}
             <div className="space-y-6">
-              <div className="bg-black/50 backdrop-blur-sm border border-white/10 p-6 hover:border-[#00FFD1]/50 transition-all duration-400">
+              <div 
+                className="bg-black/50 backdrop-blur-sm border p-6 transition-all duration-400"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#00FFD1]/10 border border-[#00FFD1]/30 flex items-center justify-center flex-shrink-0">
-                    <MapPin size={24} className="text-[#00FFD1]" />
+                  <div className="w-12 h-12 border flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(212, 175, 55, 0.1)', borderColor: 'var(--color-border)' }}>
+                    <MapPin size={24} style={{ color: 'var(--color-primary)' }} />
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">Address</h3>
@@ -167,10 +193,15 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="bg-black/50 backdrop-blur-sm border border-white/10 p-6 hover:border-[#00FFD1]/50 transition-all duration-400">
+              <div 
+                className="bg-black/50 backdrop-blur-sm border p-6 transition-all duration-400"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#00FFD1]/10 border border-[#00FFD1]/30 flex items-center justify-center flex-shrink-0">
-                    <Phone size={24} className="text-[#00FFD1]" />
+                  <div className="w-12 h-12 border flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(212, 175, 55, 0.1)', borderColor: 'var(--color-border)' }}>
+                    <Phone size={24} style={{ color: 'var(--color-primary)' }} />
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">Phone</h3>
@@ -179,10 +210,15 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="bg-black/50 backdrop-blur-sm border border-white/10 p-6 hover:border-[#00FFD1]/50 transition-all duration-400">
+              <div 
+                className="bg-black/50 backdrop-blur-sm border p-6 transition-all duration-400"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#00FFD1]/10 border border-[#00FFD1]/30 flex items-center justify-center flex-shrink-0">
-                    <Mail size={24} className="text-[#00FFD1]" />
+                  <div className="w-12 h-12 border flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(212, 175, 55, 0.1)', borderColor: 'var(--color-border)' }}>
+                    <Mail size={24} style={{ color: 'var(--color-primary)' }} />
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">Email</h3>
@@ -191,10 +227,15 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="bg-black/50 backdrop-blur-sm border border-white/10 p-6 hover:border-[#00FFD1]/50 transition-all duration-400">
+              <div 
+                className="bg-black/50 backdrop-blur-sm border p-6 transition-all duration-400"
+                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#00FFD1]/10 border border-[#00FFD1]/30 flex items-center justify-center flex-shrink-0">
-                    <Clock size={24} className="text-[#00FFD1]" />
+                  <div className="w-12 h-12 border flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(212, 175, 55, 0.1)', borderColor: 'var(--color-border)' }}>
+                    <Clock size={24} style={{ color: 'var(--color-primary)' }} />
                   </div>
                   <div>
                     <h3 className="text-white text-lg font-semibold mb-2">Business Hours</h3>
@@ -220,7 +261,7 @@ const Contact = () => {
       </div>
 
       {/* Decorative Glow */}
-      <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-[#00FFD1] opacity-5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[400px] opacity-5 blur-[120px] rounded-full pointer-events-none" style={{ background: 'var(--color-primary)' }} />
     </section>
   );
 };

@@ -21,8 +21,8 @@ const WhyChoose = () => {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,255,209,0.1) 1px, rgba(0,255,209,0.1) 7.6923%),
-              repeating-linear-gradient(-90deg, rgba(0,255,209,0.1), rgba(0,255,209,0.1) 1px, transparent 1px, transparent 7.6923%)
+              repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(212,175,55,0.1) 1px, rgba(212,175,55,0.1) 7.6923%),
+              repeating-linear-gradient(-90deg, rgba(212,175,55,0.1), rgba(212,175,55,0.1) 1px, transparent 1px, transparent 7.6923%)
             `,
             backgroundSize: '100% 100%',
           }}
@@ -38,7 +38,7 @@ const WhyChoose = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="text-[#00FFD1] text-lg font-medium tracking-wider uppercase mb-4 block">
+          <span className="text-lg font-medium tracking-wider uppercase mb-4 block" style={{ color: 'var(--color-primary)' }}>
             Why Choose Tambe
           </span>
           <h2 className="text-white text-5xl md:text-[48px] font-semibold leading-[1.1] tracking-tight mb-6">
@@ -65,18 +65,35 @@ const WhyChoose = () => {
               >
                 {/* Icon */}
                 <div className="mb-6">
-                  <div className="w-16 h-16 bg-[#00FFD1]/10 border border-[#00FFD1]/30 flex items-center justify-center group-hover:bg-[#00FFD1] group-hover:shadow-[0_0_30px_rgba(0,255,209,0.3)] transition-all duration-400">
+                  <div 
+                    className="w-16 h-16 border flex items-center justify-center transition-all duration-400 group"
+                    style={{ 
+                      background: 'rgba(212, 175, 55, 0.1)',
+                      borderColor: 'var(--color-border)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--color-primary)';
+                      e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(212, 175, 55, 0.1)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
                     {Icon && (
                       <Icon
                         size={32}
-                        className="text-[#00FFD1] group-hover:text-black transition-colors duration-400"
+                        className="transition-colors duration-400"
+                        style={{ color: 'var(--color-primary)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#000'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
                       />
                     )}
                   </div>
                 </div>
 
                 {/* Content */}
-                <h3 className="text-white text-2xl font-semibold mb-3 group-hover:text-[#00FFD1] transition-colors duration-300">
+                <h3 className="text-white text-2xl font-semibold mb-3 transition-colors duration-300">
                   {feature.title}
                 </h3>
                 <p className="text-white/70 text-base leading-relaxed">{feature.description}</p>
@@ -95,19 +112,19 @@ const WhyChoose = () => {
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-[#00FFD1] text-3xl font-semibold mb-2">ISO 9001</div>
+              <div className="text-3xl font-semibold mb-2" style={{ color: 'var(--color-primary)' }}>ISO 9001</div>
               <div className="text-white/60 text-sm">Certified Quality</div>
             </div>
             <div>
-              <div className="text-[#00FFD1] text-3xl font-semibold mb-2">100%</div>
+              <div className="text-3xl font-semibold mb-2" style={{ color: 'var(--color-primary)' }}>100%</div>
               <div className="text-white/60 text-sm">Tested Products</div>
             </div>
             <div>
-              <div className="text-[#00FFD1] text-3xl font-semibold mb-2">24/7</div>
+              <div className="text-3xl font-semibold mb-2" style={{ color: 'var(--color-primary)' }}>24/7</div>
               <div className="text-white/60 text-sm">Support Available</div>
             </div>
             <div>
-              <div className="text-[#00FFD1] text-3xl font-semibold mb-2">Global</div>
+              <div className="text-3xl font-semibold mb-2" style={{ color: 'var(--color-primary)' }}>Global</div>
               <div className="text-white/60 text-sm">Shipping Network</div>
             </div>
           </div>
@@ -115,7 +132,7 @@ const WhyChoose = () => {
       </div>
 
       {/* Decorative Glow */}
-      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-[#00FFD1] opacity-5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] opacity-5 blur-[120px] rounded-full pointer-events-none" style={{ background: 'var(--color-primary)' }} />
     </section>
   );
 };

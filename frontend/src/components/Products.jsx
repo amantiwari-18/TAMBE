@@ -43,8 +43,8 @@ const Products = () => {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,255,209,0.1) 1px, rgba(0,255,209,0.1) 7.6923%),
-              repeating-linear-gradient(-90deg, rgba(0,255,209,0.1), rgba(0,255,209,0.1) 1px, transparent 1px, transparent 7.6923%)
+              repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(212,175,55,0.1) 1px, rgba(212,175,55,0.1) 7.6923%),
+              repeating-linear-gradient(-90deg, rgba(212,175,55,0.1), rgba(212,175,55,0.1) 1px, transparent 1px, transparent 7.6923%)
             `,
             backgroundSize: '100% 100%',
           }}
@@ -100,7 +100,7 @@ const Products = () => {
                   ) : (
                     <div
                       style={{
-                        background: `linear-gradient(135deg, rgba(0,255,209,0.1) 0%, rgba(0,150,150,0.05) 50%, rgba(0,0,0,0.9) 100%)`,
+                        background: `linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(150,120,50,0.05) 50%, rgba(0,0,0,0.9) 100%)`,
                       }}
                       className="w-full h-full flex items-center justify-center"
                     >

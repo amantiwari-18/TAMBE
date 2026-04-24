@@ -37,7 +37,10 @@ const Footer = () => {
                 <li key={index}>
                   <a
                     href={link.href}
-                    className="text-white/60 hover:text-[#00FFD1] text-base transition-colors duration-300"
+                    className="text-white/60 text-base transition-colors duration-300"
+                    style={{ transition: 'color 0.3s' }}
+                    onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+                    onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.6)'}
                   >
                     {link.label}
                   </a>
@@ -54,7 +57,10 @@ const Footer = () => {
                 <li key={index}>
                   <a
                     href={product.href}
-                    className="text-white/60 hover:text-[#00FFD1] text-base transition-colors duration-300"
+                    className="text-white/60 text-base transition-colors duration-300"
+                    style={{ transition: 'color 0.3s' }}
+                    onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+                    onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.6)'}
                   >
                     {product.label}
                   </a>
@@ -78,7 +84,16 @@ const Footer = () => {
                     key={index}
                     href={social.href}
                     whileHover={{ y: -4 }}
-                    className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#00FFD1] hover:border-[#00FFD1] transition-all duration-300 group"
+                    className="w-10 h-10 bg-white/5 border flex items-center justify-center transition-all duration-300 group"
+                    style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--color-primary)';
+                      e.currentTarget.style.borderColor = 'var(--color-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    }}
                   >
                     {Icon && (
                       <Icon
@@ -101,13 +116,19 @@ const Footer = () => {
           <div className="flex gap-6">
             <a
               href="#"
-              className="text-white/50 hover:text-[#00FFD1] text-sm transition-colors duration-300"
+              className="text-white/50 text-sm transition-colors duration-300"
+              style={{ transition: 'color 0.3s' }}
+              onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+              onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.5)'}
             >
               Privacy Policy
             </a>
             <a
               href="#"
-              className="text-white/50 hover:text-[#00FFD1] text-sm transition-colors duration-300"
+              className="text-white/50 text-sm transition-colors duration-300"
+              style={{ transition: 'color 0.3s' }}
+              onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+              onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.5)'}
             >
               Terms of Service
             </a>
@@ -120,9 +141,15 @@ const Footer = () => {
         onClick={scrollToTop}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-8 right-8 w-12 h-12 bg-[#00FFD1] flex items-center justify-center hover:shadow-[0_0_20px_rgba(0,255,209,0.5)] transition-all duration-300 z-50"
+        className="fixed bottom-8 right-8 w-12 h-12 flex items-center justify-center transition-all duration-300 z-50"
+        style={{ 
+          background: 'var(--color-primary)',
+          boxShadow: 'none'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.5)'}
+        onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
       >
-        <ArrowUp size={24} className="text-black" />
+        <ArrowUp size={24} style={{ color: 'var(--color-button-text)' }} />
       </motion.button>
     </footer>
   );
