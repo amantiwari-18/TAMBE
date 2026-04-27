@@ -6,10 +6,23 @@
     "tagline": "WHERE CUTTING-EDGE TECHNOLOGY MEETS AUTOMOTIVE EXCELLENCE",
     "cta_text": "Explore Products",
     "cta_link": "#products",
-    "image_url": null,
+    "image_url": "/api/hero/images/d72f248d-c8a6-449f-99d6-2c161b21a55b.png",
     "is_active": true,
     "order": 1,
     "created_at": "2026-04-27T07:04:35.213917",
+    "updated_at": "2026-04-27T07:07:24.548123+00:00"
+  },
+  {
+    "id": "9c3d7e02-2e26-4e56-a038-5d32bd80677f",
+    "title": "asdfasdf",
+    "subtitle": "asdfasd",
+    "tagline": "asdfasdf",
+    "cta_text": "Explore Products",
+    "cta_link": "#products",
+    "image_url": "/api/hero/images/8813c941-13af-4adf-a248-0266438027c6.jpeg",
+    "is_active": true,
+    "order": 1,
+    "created_at": "2026-04-27T07:07:51.410458",
     "updated_at": null
   }
 ]

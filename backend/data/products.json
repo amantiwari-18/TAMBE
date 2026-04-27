@@ -15,5 +15,22 @@
     "order": 1,
     "created_at": "2026-04-27T07:04:45.906738",
     "updated_at": null
+  },
+  {
+    "id": "6d691594-ca90-4721-95d1-d60acf92ebc7",
+    "name": "dfsg",
+    "category": "Gears",
+    "description": "sdfg",
+    "features": [
+      "sdfg",
+      "hdfs",
+      "dsfh"
+    ],
+    "image_url": "/api/products/images/29043563-9bae-49ea-a8f7-d36e6a62a2d2.jpg",
+    "link_url": "http://localhost/wordpress/rbi-grade-b/",
+    "is_active": true,
+    "order": 0,
+    "created_at": "2026-04-27T07:06:55.975387",
+    "updated_at": null
   }
 ]

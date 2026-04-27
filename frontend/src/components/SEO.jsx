@@ -2,20 +2,20 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 const SEO = ({
-  title = 'Tambe Global - Precision Engineered Automotive Components',
-  description = 'Leading manufacturer of precision-engineered vehicle gears, transmission systems, and mechanical components. ISO certified quality with 25+ years of automotive excellence.',
-  keywords = 'precision gears, automotive components, vehicle gears, transmission systems, mechanical parts, custom components, drive shafts, differential gears, clutch systems, automotive engineering, ISO certified, Tambe Global',
-  author = 'Tambe Global',
-  image = 'https://tambeglobal.com/og-image.jpg',
-  url = 'https://tambeglobal.com',
+  title = 'Tambe Tools - Precision Engineering Tools & Equipment',
+  description = 'Leading manufacturer of precision-engineered tools and equipment. Quality craftsmanship with innovative design for professionals.',
+  keywords = 'precision tools, engineering tools, professional equipment, Tambe Tools, quality tools, industrial tools, manufacturing tools, construction equipment',
+  author = 'Tambe Tools',
+  image = 'https://tambetools.com/og-image.jpg',
+  url = 'https://tambetools.com',
   type = 'website',
 }) => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Tambe Global",
-    "url": "https://tambeglobal.com",
-    "logo": "https://tambeglobal.com/logo.png",
+    "name": "Tambe Tools",
+    "url": "https://tambetools.com",
+    "logo": "https://tambetools.com/logo.png",
     "description": description,
     "address": {
       "@type": "PostalAddress",
@@ -27,14 +27,14 @@ const SEO = ({
       "@type": "ContactPoint",
       "telephone": "+1-555-123-4567",
       "contactType": "Customer Service",
-      "email": "info@tambe.engineering",
+      "email": "info@tambetools.com",
       "availableLanguage": ["English"]
     },
     "sameAs": [
-      "https://www.linkedin.com/company/tambeglobal",
-      "https://twitter.com/tambeglobal",
-      "https://www.instagram.com/tambeglobal",
-      "https://www.facebook.com/tambeglobal"
+      "https://www.linkedin.com/company/tambetools",
+      "https://twitter.com/tambetools",
+      "https://www.instagram.com/tambetools",
+      "https://www.facebook.com/tambetools"
     ],
     "founder": {
       "@type": "Person",
@@ -50,29 +50,29 @@ const SEO = ({
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Tambe Global Products",
-    "description": "Precision-engineered automotive components",
+    "name": "Tambe Tools Products",
+    "description": "Precision-engineered tools and equipment",
     "itemListElement": [
       {
         "@type": "Product",
-        "name": "Precision Gears",
-        "description": "High-performance gears engineered for maximum durability and efficiency",
-        "brand": "Tambe Global",
-        "category": "Automotive Parts"
+        "name": "Precision Tools",
+        "description": "High-performance tools engineered for maximum durability and efficiency",
+        "brand": "Tambe Tools",
+        "category": "Professional Equipment"
       },
       {
         "@type": "Product",
-        "name": "Transmission Systems",
-        "description": "Complete transmission solutions for modern vehicles",
-        "brand": "Tambe Global",
-        "category": "Automotive Parts"
+        "name": "Industrial Equipment",
+        "description": "Complete equipment solutions for modern professionals",
+        "brand": "Tambe Tools",
+        "category": "Industrial Tools"
       },
       {
         "@type": "Product",
-        "name": "Drive Shafts",
-        "description": "Premium drive shafts built for performance and longevity",
-        "brand": "Tambe Global",
-        "category": "Automotive Parts"
+        "name": "Engineering Tools",
+        "description": "Premium engineering tools built for performance and longevity",
+        "brand": "Tambe Tools",
+        "category": "Professional Equipment"
       }
     ]
   };
@@ -98,7 +98,7 @@ const SEO = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:site_name" content="Tambe Global" />
+      <meta property="og:site_name" content="Tambe Tools" />
       <meta property="og:locale" content="en_US" />
       
       {/* Twitter */}
@@ -107,7 +107,7 @@ const SEO = ({
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={image} />
-      <meta property="twitter:creator" content="@tambeglobal" />
+      <meta property="twitter:creator" content="@tambetools" />
       
       {/* Additional Meta Tags */}
       <meta name="theme-color" content="#D4AF37" />
