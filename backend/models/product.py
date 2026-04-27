@@ -14,8 +14,8 @@ class Product(BaseModel):
     link_url: Optional[str] = None  # Learn More button URL
     is_active: bool = True
     order: int = 0
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    updated_at: Optional[str] = None
 
 
 class ProductCreate(BaseModel):
@@ -50,5 +50,5 @@ class ProductResponse(BaseModel):
     link_url: Optional[str]
     is_active: bool
     order: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: str
+    updated_at: Optional[str] = None

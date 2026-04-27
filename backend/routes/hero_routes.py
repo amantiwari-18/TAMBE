@@ -73,7 +73,7 @@ async def update_hero_slide(
     update_data = slide_data.dict(exclude_unset=True)
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
-    await db.hero_slides.update_one({"id": slide_id}, {"$set": update_data})
+    hero_storage.update_one({"id": slide_id}, update_data)
 
     updated_slide = hero_storage.find_one({"id": slide_id})
     return HeroSlide(**updated_slide).dict()

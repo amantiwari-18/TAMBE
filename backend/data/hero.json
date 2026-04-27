@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "id": "6c7558dc-5a6d-4cac-a21e-20536da66bc3",
+    "title": "Engineering Precision. Powering Performance.",
+    "subtitle": "Crafting the future of automotive excellence with precision-engineered components",
+    "tagline": "WHERE CUTTING-EDGE TECHNOLOGY MEETS AUTOMOTIVE EXCELLENCE",
+    "cta_text": "Explore Products",
+    "cta_link": "#products",
+    "image_url": null,
+    "is_active": true,
+    "order": 1,
+    "created_at": "2026-04-27T07:04:35.213917",
+    "updated_at": null
+  }
+]
