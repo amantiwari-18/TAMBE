@@ -16,8 +16,11 @@ from json_storage import hero_storage
 
 router = APIRouter(prefix="/hero", tags=["hero"])
 
-UPLOAD_DIR = "/app/backend/uploads/hero"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+UPLOAD_DIR = "/tmp/uploads/hero"
+try:
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+except (PermissionError, OSError) as e:
+    print(f"Warning: Could not create upload directory: {e}")
 
 
 # Simple auth check
