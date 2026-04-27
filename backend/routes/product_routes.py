@@ -7,11 +7,12 @@ from models.product import (
     ProductUpdate,
     ProductResponse,
 )
-from motor.motor_asyncio import AsyncIOMotorDatabase
-from datetime import datetime
+
+from datetime import datetime, timezone
 import os
 import shutil
 import uuid
+from json_storage import products_storage
 
 router = APIRouter(prefix="/products", tags=["products"])
 
@@ -27,27 +28,21 @@ def verify_admin_token(x_admin_token: Optional[str] = Header(None)):
     return True
 
 
-# Dependency to get database
-async def get_db():
-    from server import db
-    return db
-
 
 # Get all products (public - for website)
 @router.get("", response_model=List[ProductResponse])
 async def get_products(
     active_only: bool = True,
-    db: AsyncIOMotorDatabase = Depends(get_db)
-):
+    ):
     query = {"is_active": True} if active_only else {}
-    products = await db.products.find(query).sort("order", 1).to_list(100)
+    products = products_storage.find_all(query)
     return [Product(**product).dict() for product in products]
 
 
 # Get product by ID
 @router.get("/{product_id}", response_model=ProductResponse)
-async def get_product(product_id: str, db: AsyncIOMotorDatabase = Depends(get_db)):
-    product = await db.products.find_one({"id": product_id})
+async def get_product(product_id: str, ):
+    product = products_storage.find_one({"id": product_id})
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     return Product(**product).dict()
@@ -57,11 +52,10 @@ async def get_product(product_id: str, db: AsyncIOMotorDatabase = Depends(get_db
 @router.post("", response_model=ProductResponse)
 async def create_product(
     product_data: ProductCreate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
     product = Product(**product_data.dict())
-    await db.products.insert_one(product.dict())
+    products_storage.insert_one(product.dict())
     return product.dict()
 
 
@@ -70,19 +64,18 @@ async def create_product(
 async def update_product(
     product_id: str,
     product_data: ProductUpdate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    product = await db.products.find_one({"id": product_id})
+    product = products_storage.find_one({"id": product_id})
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
 
     update_data = product_data.dict(exclude_unset=True)
-    update_data["updated_at"] = datetime.utcnow()
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
     await db.products.update_one({"id": product_id}, {"$set": update_data})
 
-    updated_product = await db.products.find_one({"id": product_id})
+    updated_product = products_storage.find_one({"id": product_id})
     return Product(**updated_product).dict()
 
 
@@ -90,14 +83,13 @@ async def update_product(
 @router.delete("/{product_id}")
 async def delete_product(
     product_id: str,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    product = await db.products.find_one({"id": product_id})
+    product = products_storage.find_one({"id": product_id})
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    await db.products.delete_one({"id": product_id})
+    products_storage.delete_one({"id": product_id})
     return {"message": "Product deleted successfully"}
 
 
@@ -143,13 +135,12 @@ async def get_product_image(filename: str):
 @router.post("/reorder")
 async def reorder_products(
     product_ids: List[str],
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
     for index, product_id in enumerate(product_ids):
         await db.products.update_one(
             {"id": product_id},
-            {"$set": {"order": index, "updated_at": datetime.utcnow()}}
+            {"$set": {"order": index, "updated_at": datetime.now(timezone.utc).isoformat()}}
         )
     return {"message": "Products reordered successfully"}
 
@@ -157,7 +148,6 @@ async def reorder_products(
 # Initialize default products
 @router.post("/initialize")
 async def initialize_products(
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
     # Check if products already exist

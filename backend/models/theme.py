@@ -35,8 +35,8 @@ class Theme(BaseModel):
     fonts: FontSettings
     is_active: bool = False
     is_preset: bool = False
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    updated_at: Optional[str] = None
 
 
 class ThemeCreate(BaseModel):
@@ -58,5 +58,5 @@ class ThemeResponse(BaseModel):
     fonts: FontSettings
     is_active: bool
     is_preset: bool
-    created_at: datetime
-    updated_at: datetime
+    created_at: str
+    updated_at: Optional[str] = None

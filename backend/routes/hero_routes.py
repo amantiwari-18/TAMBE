@@ -7,11 +7,12 @@ from models.hero import (
     HeroSlideUpdate,
     HeroSlideResponse,
 )
-from motor.motor_asyncio import AsyncIOMotorDatabase
-from datetime import datetime
+
+from datetime import datetime, timezone
 import os
 import shutil
 import uuid
+from json_storage import hero_storage
 
 router = APIRouter(prefix="/hero", tags=["hero"])
 
@@ -27,27 +28,21 @@ def verify_admin_token(x_admin_token: Optional[str] = Header(None)):
     return True
 
 
-# Dependency to get database
-async def get_db():
-    from server import db
-    return db
-
 
 # Get all hero slides (public - for website)
 @router.get("", response_model=List[HeroSlideResponse])
 async def get_hero_slides(
     active_only: bool = True,
-    db: AsyncIOMotorDatabase = Depends(get_db)
-):
+    ):
     query = {"is_active": True} if active_only else {}
-    slides = await db.hero_slides.find(query).sort("order", 1).to_list(100)
+    slides = hero_storage.find_all(query)
     return [HeroSlide(**slide).dict() for slide in slides]
 
 
 # Get hero slide by ID
 @router.get("/{slide_id}", response_model=HeroSlideResponse)
-async def get_hero_slide(slide_id: str, db: AsyncIOMotorDatabase = Depends(get_db)):
-    slide = await db.hero_slides.find_one({"id": slide_id})
+async def get_hero_slide(slide_id: str, ):
+    slide = hero_storage.find_one({"id": slide_id})
     if not slide:
         raise HTTPException(status_code=404, detail="Hero slide not found")
     return HeroSlide(**slide).dict()
@@ -57,11 +52,10 @@ async def get_hero_slide(slide_id: str, db: AsyncIOMotorDatabase = Depends(get_d
 @router.post("", response_model=HeroSlideResponse)
 async def create_hero_slide(
     slide_data: HeroSlideCreate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
     slide = HeroSlide(**slide_data.dict())
-    await db.hero_slides.insert_one(slide.dict())
+    hero_storage.insert_one(slide.dict())
     return slide.dict()
 
 
@@ -70,19 +64,18 @@ async def create_hero_slide(
 async def update_hero_slide(
     slide_id: str,
     slide_data: HeroSlideUpdate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    slide = await db.hero_slides.find_one({"id": slide_id})
+    slide = hero_storage.find_one({"id": slide_id})
     if not slide:
         raise HTTPException(status_code=404, detail="Hero slide not found")
 
     update_data = slide_data.dict(exclude_unset=True)
-    update_data["updated_at"] = datetime.utcnow()
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
     await db.hero_slides.update_one({"id": slide_id}, {"$set": update_data})
 
-    updated_slide = await db.hero_slides.find_one({"id": slide_id})
+    updated_slide = hero_storage.find_one({"id": slide_id})
     return HeroSlide(**updated_slide).dict()
 
 
@@ -90,14 +83,13 @@ async def update_hero_slide(
 @router.delete("/{slide_id}")
 async def delete_hero_slide(
     slide_id: str,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    slide = await db.hero_slides.find_one({"id": slide_id})
+    slide = hero_storage.find_one({"id": slide_id})
     if not slide:
         raise HTTPException(status_code=404, detail="Hero slide not found")
 
-    await db.hero_slides.delete_one({"id": slide_id})
+    hero_storage.delete_one({"id": slide_id})
     return {"message": "Hero slide deleted successfully"}
 
 
@@ -142,7 +134,6 @@ async def get_hero_image(filename: str):
 # Initialize default hero slide
 @router.post("/initialize")
 async def initialize_hero(
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
     existing_count = await db.hero_slides.count_documents({})
@@ -158,5 +149,5 @@ async def initialize_hero(
         order=0,
     )
 
-    await db.hero_slides.insert_one(default_slide.dict())
+    hero_storage.insert_one(default_slide.dict())
     return {"message": "Hero slide initialized successfully"}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Header, Depends
 from typing import List, Optional
 from models.theme import (
     Theme,
@@ -8,9 +8,9 @@ from models.theme import (
     ColorSettings,
     FontSettings,
 )
-from motor.motor_asyncio import AsyncIOMotorDatabase
-from datetime import datetime
+from datetime import datetime, timezone
 import os
+from json_storage import themes_storage
 
 router = APIRouter(prefix="/themes", tags=["themes"])
 
@@ -23,23 +23,17 @@ def verify_admin_token(x_admin_token: Optional[str] = Header(None)):
     return True
 
 
-# Dependency to get database
-async def get_db():
-    from server import db
-    return db
-
-
 # Get all themes
 @router.get("", response_model=List[ThemeResponse])
-async def get_themes(db: AsyncIOMotorDatabase = Depends(get_db)):
-    themes = await db.themes.find().to_list(100)
+async def get_themes():
+    themes = themes_storage.find_all()
     return [Theme(**theme).dict() for theme in themes]
 
 
 # Get active theme
 @router.get("/active", response_model=ThemeResponse)
-async def get_active_theme(db: AsyncIOMotorDatabase = Depends(get_db)):
-    theme = await db.themes.find_one({"is_active": True})
+async def get_active_theme():
+    theme = themes_storage.find_one({"is_active": True})
     if not theme:
         # Return default theme if no active theme
         return get_default_theme("Industrial Dark")
@@ -48,8 +42,8 @@ async def get_active_theme(db: AsyncIOMotorDatabase = Depends(get_db)):
 
 # Get theme by ID
 @router.get("/{theme_id}", response_model=ThemeResponse)
-async def get_theme(theme_id: str, db: AsyncIOMotorDatabase = Depends(get_db)):
-    theme = await db.themes.find_one({"id": theme_id})
+async def get_theme(theme_id: str):
+    theme = themes_storage.find_one({"id": theme_id})
     if not theme:
         raise HTTPException(status_code=404, detail="Theme not found")
     return Theme(**theme).dict()
@@ -59,11 +53,10 @@ async def get_theme(theme_id: str, db: AsyncIOMotorDatabase = Depends(get_db)):
 @router.post("", response_model=ThemeResponse)
 async def create_theme(
     theme_data: ThemeCreate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
     theme = Theme(**theme_data.dict())
-    await db.themes.insert_one(theme.dict())
+    themes_storage.insert_one(theme.dict())
     return theme.dict()
 
 
@@ -72,19 +65,18 @@ async def create_theme(
 async def update_theme(
     theme_id: str,
     theme_data: ThemeUpdate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    theme = await db.themes.find_one({"id": theme_id})
+    theme = themes_storage.find_one({"id": theme_id})
     if not theme:
         raise HTTPException(status_code=404, detail="Theme not found")
 
     update_data = theme_data.dict(exclude_unset=True)
-    update_data["updated_at"] = datetime.utcnow()
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
 
-    await db.themes.update_one({"id": theme_id}, {"$set": update_data})
+    themes_storage.update_one({"id": theme_id}, update_data)
 
-    updated_theme = await db.themes.find_one({"id": theme_id})
+    updated_theme = themes_storage.find_one({"id": theme_id})
     return Theme(**updated_theme).dict()
 
 
@@ -92,20 +84,22 @@ async def update_theme(
 @router.post("/{theme_id}/activate", response_model=ThemeResponse)
 async def activate_theme(
     theme_id: str,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    theme = await db.themes.find_one({"id": theme_id})
+    theme = themes_storage.find_one({"id": theme_id})
     if not theme:
         raise HTTPException(status_code=404, detail="Theme not found")
 
     # Deactivate all themes
-    await db.themes.update_many({}, {"$set": {"is_active": False}})
+    all_themes = themes_storage.find_all()
+    for t in all_themes:
+        if t.get("is_active"):
+            themes_storage.update_one({"id": t["id"]}, {"is_active": False})
 
-    # Activate selected theme
-    await db.themes.update_one({"id": theme_id}, {"$set": {"is_active": True}})
+    # Activate the selected theme
+    themes_storage.update_one({"id": theme_id}, {"is_active": True})
 
-    updated_theme = await db.themes.find_one({"id": theme_id})
+    updated_theme = themes_storage.find_one({"id": theme_id})
     return Theme(**updated_theme).dict()
 
 
@@ -113,146 +107,187 @@ async def activate_theme(
 @router.delete("/{theme_id}")
 async def delete_theme(
     theme_id: str,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    theme = await db.themes.find_one({"id": theme_id})
+    theme = themes_storage.find_one({"id": theme_id})
     if not theme:
         raise HTTPException(status_code=404, detail="Theme not found")
 
-    if theme.get("is_preset"):
+    # Prevent deletion of preset themes
+    if theme.get("is_preset", False):
         raise HTTPException(status_code=400, detail="Cannot delete preset themes")
 
-    if theme.get("is_active"):
+    # Prevent deletion of active theme
+    if theme.get("is_active", False):
         raise HTTPException(
-            status_code=400, detail="Cannot delete active theme. Activate another theme first."
+            status_code=400, detail="Cannot delete active theme. Please activate another theme first."
         )
 
-    await db.themes.delete_one({"id": theme_id})
+    themes_storage.delete_one({"id": theme_id})
     return {"message": "Theme deleted successfully"}
 
 
-# Get preset themes
-@router.get("/presets/all", response_model=List[ThemeResponse])
-async def get_presets():
+# Get theme presets
+@router.get("/presets/list", response_model=List[ThemeResponse])
+async def get_theme_presets():
+    """Get all preset themes"""
     presets = [
         get_default_theme("Industrial Dark"),
-        get_default_theme("Clean Light"),
-        get_default_theme("High Contrast"),
+        get_default_theme("Luxury Gold"),
+        get_default_theme("Electric Blue"),
+        get_default_theme("Carbon Black"),
     ]
     return presets
 
 
-# Helper function to get default themes
-def get_default_theme(preset_name: str) -> dict:
-    presets = {
-        "Industrial Dark": Theme(
-            id=f"preset-industrial-dark",
-            name="Industrial Dark",
-            colors=ColorSettings(
-                primary="#D4AF37",  # Rich Gold
-                secondary="#FFFFFF",
-                background="#0A0E17",  # Deep Navy Black
-                background_secondary="#141B2D",  # Dark Blue Gray
-                text_primary="#FFFFFF",
-                text_secondary="rgba(255, 255, 255, 0.85)",
-                text_muted="rgba(255, 255, 255, 0.6)",
-                button_bg="#D4AF37",  # Gold
-                button_text="#0A0E17",  # Dark
-                button_hover_bg="#F4D03F",  # Lighter Gold
-                button_hover_text="#0A0E17",
-                border="rgba(212, 175, 55, 0.2)",  # Gold tint
-            ),
-            fonts=FontSettings(
-                family="Inter",
-                h1_size="66px",
-                h2_size="48px",
-                h3_size="32px",
-                body_size="18px",
-                button_size="18px",
-            ),
-            is_active=True,
-            is_preset=True,
-        ),
-        "Clean Light": Theme(
-            id=f"preset-clean-light",
-            name="Clean Light",
-            colors=ColorSettings(
-                primary="#1E3A8A",  # Deep Blue
-                secondary="#000000",
-                background="#F9FAFB",  # Light Gray
-                background_secondary="#FFFFFF",
-                text_primary="#111827",  # Almost Black
-                text_secondary="rgba(0, 0, 0, 0.8)",
-                text_muted="rgba(0, 0, 0, 0.6)",
-                button_bg="#1E3A8A",
-                button_text="#FFFFFF",
-                button_hover_bg="#1E40AF",
-                button_hover_text="#FFFFFF",
-                border="rgba(30, 58, 138, 0.2)",
-            ),
-            fonts=FontSettings(
-                family="Poppins",
-                h1_size="64px",
-                h2_size="48px",
-                h3_size="32px",
-                body_size="16px",
-                button_size="16px",
-            ),
-            is_active=False,
-            is_preset=True,
-        ),
-        "High Contrast": Theme(
-            id=f"preset-high-contrast",
-            name="High Contrast",
-            colors=ColorSettings(
-                primary="#FBBF24",  # Amber Gold
-                secondary="#FFFFFF",
-                background="#000000",
-                background_secondary="#1F2937",  # Dark Gray
-                text_primary="#FFFFFF",
-                text_secondary="#F3F4F6",
-                text_muted="rgba(255, 255, 255, 0.8)",
-                button_bg="#FBBF24",
-                button_text="#000000",
-                button_hover_bg="#FCD34D",
-                button_hover_text="#000000",
-                border="rgba(251, 191, 36, 0.3)",
-            ),
-            fonts=FontSettings(
-                family="Roboto",
-                h1_size="72px",
-                h2_size="52px",
-                h3_size="36px",
-                body_size="20px",
-                button_size="20px",
-            ),
-            is_active=False,
-            is_preset=True,
-        ),
-    }
-
-    return presets.get(preset_name).dict()
-
-
 # Initialize preset themes
 @router.post("/presets/initialize")
-async def initialize_presets(
-    db: AsyncIOMotorDatabase = Depends(get_db),
-    _: bool = Depends(verify_admin_token),
-):
-    # Check if presets already exist
-    existing_presets = await db.themes.find({"is_preset": True}).to_list(10)
-    if existing_presets:
-        return {"message": "Presets already initialized", "count": len(existing_presets)}
+async def initialize_presets(_: bool = Depends(verify_admin_token)):
+    """Initialize default preset themes if they don't exist"""
+    preset_names = ["Industrial Dark", "Luxury Gold", "Electric Blue", "Carbon Black"]
+    
+    for name in preset_names:
+        preset_id = f"preset-{name.lower().replace(' ', '-')}"
+        existing = themes_storage.find_one({"id": preset_id})
+        
+        if not existing:
+            preset = get_default_theme(name)
+            themes_storage.insert_one(preset)
+    
+    # If no active theme, set Industrial Dark as active
+    active_theme = themes_storage.find_one({"is_active": True})
+    if not active_theme:
+        themes_storage.update_one(
+            {"id": "preset-industrial-dark"},
+            {"is_active": True}
+        )
+    
+    return {"message": "Preset themes initialized successfully"}
 
-    presets = [
-        get_default_theme("Industrial Dark"),
-        get_default_theme("Clean Light"),
-        get_default_theme("High Contrast"),
-    ]
 
-    for preset in presets:
-        await db.themes.insert_one(preset)
-
-    return {"message": "Presets initialized successfully", "count": len(presets)}
+def get_default_theme(name: str = "Industrial Dark") -> dict:
+    """Get default theme configuration"""
+    themes_map = {
+        "Industrial Dark": {
+            "id": "preset-industrial-dark",
+            "name": "Industrial Dark",
+            "colors": {
+                "primary": "#00FFD1",
+                "secondary": "#FFFFFF",
+                "background": "#000000",
+                "background_secondary": "#121212",
+                "text_primary": "#FFFFFF",
+                "text_secondary": "rgba(255, 255, 255, 0.8)",
+                "text_muted": "rgba(255, 255, 255, 0.6)",
+                "button_bg": "#00FFD1",
+                "button_text": "#000000",
+                "button_hover_bg": "#FFFFFF",
+                "button_hover_text": "#000000",
+                "border": "rgba(255, 255, 255, 0.1)",
+            },
+            "fonts": {
+                "family": "Inter",
+                "h1_size": "66px",
+                "h2_size": "48px",
+                "h3_size": "32px",
+                "body_size": "18px",
+                "button_size": "18px",
+            },
+            "is_active": False,
+            "is_preset": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": None,
+        },
+        "Luxury Gold": {
+            "id": "preset-luxury-gold",
+            "name": "Luxury Gold",
+            "colors": {
+                "primary": "#D4AF37",
+                "secondary": "#1A2332",
+                "background": "#0A0E17",
+                "background_secondary": "#141B2D",
+                "text_primary": "#FFFFFF",
+                "text_secondary": "rgba(255, 255, 255, 0.85)",
+                "text_muted": "rgba(255, 255, 255, 0.6)",
+                "button_bg": "#D4AF37",
+                "button_text": "#0A0E17",
+                "button_hover_bg": "#F4D03F",
+                "button_hover_text": "#0A0E17",
+                "border": "rgba(212, 175, 55, 0.2)",
+            },
+            "fonts": {
+                "family": "Inter",
+                "h1_size": "66px",
+                "h2_size": "48px",
+                "h3_size": "32px",
+                "body_size": "18px",
+                "button_size": "18px",
+            },
+            "is_active": False,
+            "is_preset": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": None,
+        },
+        "Electric Blue": {
+            "id": "preset-electric-blue",
+            "name": "Electric Blue",
+            "colors": {
+                "primary": "#00A3FF",
+                "secondary": "#1E3A5F",
+                "background": "#0B1929",
+                "background_secondary": "#152238",
+                "text_primary": "#FFFFFF",
+                "text_secondary": "rgba(255, 255, 255, 0.85)",
+                "text_muted": "rgba(255, 255, 255, 0.6)",
+                "button_bg": "#00A3FF",
+                "button_text": "#FFFFFF",
+                "button_hover_bg": "#0080CC",
+                "button_hover_text": "#FFFFFF",
+                "border": "rgba(0, 163, 255, 0.2)",
+            },
+            "fonts": {
+                "family": "Inter",
+                "h1_size": "66px",
+                "h2_size": "48px",
+                "h3_size": "32px",
+                "body_size": "18px",
+                "button_size": "18px",
+            },
+            "is_active": False,
+            "is_preset": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": None,
+        },
+        "Carbon Black": {
+            "id": "preset-carbon-black",
+            "name": "Carbon Black",
+            "colors": {
+                "primary": "#FF6B35",
+                "secondary": "#2A2A2A",
+                "background": "#0D0D0D",
+                "background_secondary": "#1A1A1A",
+                "text_primary": "#FFFFFF",
+                "text_secondary": "rgba(255, 255, 255, 0.85)",
+                "text_muted": "rgba(255, 255, 255, 0.6)",
+                "button_bg": "#FF6B35",
+                "button_text": "#FFFFFF",
+                "button_hover_bg": "#FF8555",
+                "button_hover_text": "#FFFFFF",
+                "border": "rgba(255, 107, 53, 0.2)",
+            },
+            "fonts": {
+                "family": "Inter",
+                "h1_size": "66px",
+                "h2_size": "48px",
+                "h3_size": "32px",
+                "body_size": "18px",
+                "button_size": "18px",
+            },
+            "is_active": False,
+            "is_preset": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": None,
+        },
+    }
+    
+    return themes_map.get(name, themes_map["Industrial Dark"])

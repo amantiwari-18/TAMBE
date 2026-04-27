@@ -5,9 +5,10 @@ from models.settings import (
     SiteSettingsUpdate,
     SiteSettingsResponse,
 )
-from motor.motor_asyncio import AsyncIOMotorDatabase
-from datetime import datetime
+
+from datetime import datetime, timezone
 import os
+from json_storage import settings_storage
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 
@@ -20,16 +21,11 @@ def verify_admin_token(x_admin_token: Optional[str] = Header(None)):
     return True
 
 
-# Dependency to get database
-async def get_db():
-    from server import db
-    return db
-
 
 # Get site settings (public)
 @router.get("", response_model=SiteSettingsResponse)
-async def get_settings(db: AsyncIOMotorDatabase = Depends(get_db)):
-    settings = await db.settings.find_one({})
+async def get_settings():
+    settings = settings_storage.get()
     if not settings:
         # Return default settings
         default_settings = SiteSettings()
@@ -42,10 +38,9 @@ async def get_settings(db: AsyncIOMotorDatabase = Depends(get_db)):
 @router.put("", response_model=SiteSettingsResponse)
 async def update_settings(
     settings_data: SiteSettingsUpdate,
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    settings = await db.settings.find_one({})
+    settings = settings_storage.get()
     
     if not settings:
         # Create new settings
@@ -55,21 +50,20 @@ async def update_settings(
     
     # Update existing settings
     update_data = settings_data.dict(exclude_unset=True)
-    update_data["updated_at"] = datetime.utcnow()
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     
     await db.settings.update_one({}, {"$set": update_data})
     
-    updated_settings = await db.settings.find_one({})
+    updated_settings = settings_storage.get()
     return SiteSettings(**updated_settings).dict()
 
 
 # Initialize default settings
 @router.post("/initialize")
 async def initialize_settings(
-    db: AsyncIOMotorDatabase = Depends(get_db),
     _: bool = Depends(verify_admin_token),
 ):
-    existing = await db.settings.find_one({})
+    existing = settings_storage.get()
     if existing:
         return {"message": "Settings already initialized"}
     

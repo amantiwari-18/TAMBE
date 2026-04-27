@@ -1,0 +1,122 @@
+[
+  {
+    "id": "preset-industrial-dark",
+    "name": "Industrial Dark",
+    "colors": {
+      "primary": "#00FFD1",
+      "secondary": "#FFFFFF",
+      "background": "#000000",
+      "background_secondary": "#121212",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "rgba(255, 255, 255, 0.8)",
+      "text_muted": "rgba(255, 255, 255, 0.6)",
+      "button_bg": "#00FFD1",
+      "button_text": "#000000",
+      "button_hover_bg": "#FFFFFF",
+      "button_hover_text": "#000000",
+      "border": "rgba(255, 255, 255, 0.1)"
+    },
+    "fonts": {
+      "family": "Inter",
+      "h1_size": "66px",
+      "h2_size": "48px",
+      "h3_size": "32px",
+      "body_size": "18px",
+      "button_size": "18px"
+    },
+    "is_active": false,
+    "is_preset": true,
+    "created_at": "2026-04-27T06:56:07.366612+00:00",
+    "updated_at": null
+  },
+  {
+    "id": "preset-luxury-gold",
+    "name": "Luxury Gold",
+    "colors": {
+      "primary": "#D4AF37",
+      "secondary": "#1A2332",
+      "background": "#0A0E17",
+      "background_secondary": "#141B2D",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "rgba(255, 255, 255, 0.85)",
+      "text_muted": "rgba(255, 255, 255, 0.6)",
+      "button_bg": "#D4AF37",
+      "button_text": "#0A0E17",
+      "button_hover_bg": "#F4D03F",
+      "button_hover_text": "#0A0E17",
+      "border": "rgba(212, 175, 55, 0.2)"
+    },
+    "fonts": {
+      "family": "Inter",
+      "h1_size": "66px",
+      "h2_size": "48px",
+      "h3_size": "32px",
+      "body_size": "18px",
+      "button_size": "18px"
+    },
+    "is_active": true,
+    "is_preset": true,
+    "created_at": "2026-04-27T06:56:07.366857+00:00",
+    "updated_at": null
+  },
+  {
+    "id": "preset-electric-blue",
+    "name": "Electric Blue",
+    "colors": {
+      "primary": "#00A3FF",
+      "secondary": "#1E3A5F",
+      "background": "#0B1929",
+      "background_secondary": "#152238",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "rgba(255, 255, 255, 0.85)",
+      "text_muted": "rgba(255, 255, 255, 0.6)",
+      "button_bg": "#00A3FF",
+      "button_text": "#FFFFFF",
+      "button_hover_bg": "#0080CC",
+      "button_hover_text": "#FFFFFF",
+      "border": "rgba(0, 163, 255, 0.2)"
+    },
+    "fonts": {
+      "family": "Inter",
+      "h1_size": "66px",
+      "h2_size": "48px",
+      "h3_size": "32px",
+      "body_size": "18px",
+      "button_size": "18px"
+    },
+    "is_active": false,
+    "is_preset": true,
+    "created_at": "2026-04-27T06:56:07.367596+00:00",
+    "updated_at": null
+  },
+  {
+    "id": "preset-carbon-black",
+    "name": "Carbon Black",
+    "colors": {
+      "primary": "#FF6B35",
+      "secondary": "#2A2A2A",
+      "background": "#0D0D0D",
+      "background_secondary": "#1A1A1A",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "rgba(255, 255, 255, 0.85)",
+      "text_muted": "rgba(255, 255, 255, 0.6)",
+      "button_bg": "#FF6B35",
+      "button_text": "#FFFFFF",
+      "button_hover_bg": "#FF8555",
+      "button_hover_text": "#FFFFFF",
+      "border": "rgba(255, 107, 53, 0.2)"
+    },
+    "fonts": {
+      "family": "Inter",
+      "h1_size": "66px",
+      "h2_size": "48px",
+      "h3_size": "32px",
+      "body_size": "18px",
+      "button_size": "18px"
+    },
+    "is_active": false,
+    "is_preset": true,
+    "created_at": "2026-04-27T06:56:07.368097+00:00",
+    "updated_at": null
+  }
+]
