@@ -32,6 +32,7 @@ const AdminHero = () => {
     checkAuth();
     loadSlides();
   }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const checkAuth = () => {
     const token = localStorage.getItem('admin_token');

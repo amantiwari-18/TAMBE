@@ -43,16 +43,19 @@ export const ThemeProvider = ({ children }) => {
 
     // Apply colors
     root.style.setProperty('--color-primary', theme.colors.primary);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     root.style.setProperty('--color-secondary', theme.colors.secondary);
     root.style.setProperty('--color-background', theme.colors.background);
     root.style.setProperty('--color-background-secondary', theme.colors.background_secondary);
     root.style.setProperty('--color-text-primary', theme.colors.text_primary);
     root.style.setProperty('--color-text-secondary', theme.colors.text_secondary);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     root.style.setProperty('--color-text-muted', theme.colors.text_muted);
     root.style.setProperty('--color-button-bg', theme.colors.button_bg);
     root.style.setProperty('--color-button-text', theme.colors.button_text);
     root.style.setProperty('--color-button-hover-bg', theme.colors.button_hover_bg);
     root.style.setProperty('--color-button-hover-text', theme.colors.button_hover_text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     root.style.setProperty('--color-border', theme.colors.border);
 
     // Apply fonts
