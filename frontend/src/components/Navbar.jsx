@@ -35,12 +35,17 @@ const Navbar = () => {
     >
       <div className="max-w-[1400px] mx-auto px-[7.6923%] h-full flex items-center justify-between">
         {/* Logo */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="text-white text-2xl font-semibold tracking-tight"
+        <motion.a
+          href="#home"
+          whileHover={{ scale: 1.02 }}
+          className="flex items-center"
         >
-          {mockData.brand.name}
-        </motion.div>
+          <img 
+            src="/tambe-navbar-logo-white.png" 
+            alt="Tambe Logo" 
+            className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity"
+          />
+        </motion.a>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
