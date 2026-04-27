@@ -37,16 +37,17 @@ const Navbar = () => {
         {/* Logo */}
         <motion.a
           href="#home"
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.05 }}
           className="flex items-center"
         >
           <img 
             src="/tambe-navbar-logo-white.png" 
             alt="Tambe Logo" 
-            className="h-14 w-auto brightness-100 contrast-125 hover:brightness-110 transition-all"
+            className="h-10 w-auto brightness-100 contrast-125 hover:brightness-110 transition-all"
             style={{ 
               filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
-              imageRendering: 'crisp-edges'
+              imageRendering: 'crisp-edges',
+              maxWidth: '180px'
             }}
           />
         </motion.a>
