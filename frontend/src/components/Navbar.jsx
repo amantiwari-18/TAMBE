@@ -43,7 +43,11 @@ const Navbar = () => {
           <img 
             src="/tambe-navbar-logo-white.png" 
             alt="Tambe Logo" 
-            className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity"
+            className="h-14 w-auto brightness-100 contrast-125 hover:brightness-110 transition-all"
+            style={{ 
+              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
+              imageRendering: 'crisp-edges'
+            }}
           />
         </motion.a>
 
